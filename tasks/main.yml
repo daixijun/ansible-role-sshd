@@ -1,0 +1,43 @@
+---
+# tasks file for daixijun.sshd
+- import_tasks: check_vars.yml
+
+- name: 安装openssh
+  yum:
+    name: openssh-server,openssh
+    state: present
+
+- name: 添加用户组
+  group:
+    name: "{{ sshd_manage_user }}"
+    state: present
+
+- name: 添加管理员账号
+  user:
+    name: "{{ sshd_manage_user }}"
+    group: "{{ sshd_manage_user }}"
+    create_home: true
+    home: /home/{{ sshd_manage_user }}
+    move_home: true
+    shell: /bin/bash
+    state: present
+
+- name: 添加用户到sudoer中
+  copy:
+    content: "{{ sshd_manage_user }} ALL = (ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/{{ sshd_manage_user }}
+    validate: /usr/sbin/visudo -cf %s
+
+- name: 配置SSH公钥
+  authorized_key:
+    user: "{{ sshd_manage_user }}"
+    key: "{{ item }}"
+    state: present
+  with_file: "{{ sshd_pubkeys }}"
+
+- name: 配置 /etc/ssh/sshd_config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+  notify:
+    - restart sshd

@@ -1,0 +1,5 @@
+---
+# defaults file for daixijun.sshd
+sshd_port: 22
+sshd_manage_user: sysadmin
+sshd_pubkeys: []  # 公钥路径

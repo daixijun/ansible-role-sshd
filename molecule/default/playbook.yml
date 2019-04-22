@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: daixijun.sshd
+      sshd_pubkeys:
+        - /Users/xijun/.ssh/id_rsa_sysadmin.pub

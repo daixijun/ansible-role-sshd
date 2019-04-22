@@ -1,0 +1,5 @@
+---
+- name: 检测sshd_pubkeys变量
+  fail:
+    msg: "未配置 sshd_pubkeys 变量"
+  when: sshd_pubkeys is undefined or sshd_pubkeys|length == 0

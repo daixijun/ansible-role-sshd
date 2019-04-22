@@ -1,0 +1,8 @@
+---
+# handlers file for daixijun.sshd
+- name: 重启sshd服务
+  service:
+      name: sshd
+      enabled: true
+      state: restarted
+  listen: restart sshd
